@@ -8,7 +8,7 @@
 
 ## 📋 Descrição do Projeto
 
-O **Sítio Conectado** é um portal web que conecta pequenos produtores rurais de Sítio Novo — TO diretamente a consumidores locais, sem intermediários comerciais. O sistema funciona como um **mural digital comunitário**, onde produtores divulgam seus produtos (frutas, verduras, grãos, mel, ovos, entre outros) e consumidores demonstram interesse, combinando a negociação diretamente fora da plataforma.
+O **Sítio Conectado** é um portal web que conecta pequenos produtores rurais de Sítio Novo - TO diretamente a consumidores locais, sem intermediários comerciais. O sistema funciona como um **mural digital comunitário**, onde produtores divulgam seus produtos (frutas, verduras, grãos, mel, ovos, entre outros) e consumidores demonstram interesse, combinando a negociação diretamente fora da plataforma.
 
 O projeto integra na prática os conhecimentos das disciplinas de:
 - Engenharia de Requisitos
@@ -65,7 +65,7 @@ sitio_conectado/
 ### Passo 1 — Clonar o repositório
 
 ```bash
-git clone https://github.com/SEU_USUARIO/sitio-conectado.git
+git clone https://github.com/ednaldoferreira/sitio-conectado
 cd sitio-conectado
 ```
 
@@ -237,6 +237,6 @@ O banco de dados relacional `sitio_conectado` é composto por 5 tabelas:
 | _(adicionar demais integrantes)_ | _(função)_ |
 
 **Polo:** Sítio Novo — TO  
-**Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas — TADS  
-**Instituição:** Universidade Estadual do Tocantins — UNITINS  
+**Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas - TADS  
+**Instituição:** Universidade Estadual do Tocantins = UNITINS  
 **Período:** 3º Período — 2026.1
