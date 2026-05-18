@@ -1,8 +1,8 @@
 # 🌿 Sítio Conectado — Portal de Apoio ao Pequeno Produtor Rural
 
-> Projeto desenvolvido como parte da Atividade Multidisciplinar Integradora — 3º Período  
-> Tecnologia em Análise e Desenvolvimento de Sistemas — TADS  
-> Universidade Estadual do Tocantins — UNITINS — Polo Sítio Novo, TO — 2026.1
+> Projeto desenvolvido como parte da Atividade Multidisciplinar Integradora - 3º Período  
+> Tecnologia em Análise e Desenvolvimento de Sistemas - TADS  
+> Universidade Estadual do Tocantins - UNITINS - Polo Sítio Novo, TO - 2026.1
 
 ---
 
