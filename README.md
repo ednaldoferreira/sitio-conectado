@@ -1,4 +1,4 @@
-# 🌿 Sítio Conectado — Portal de Apoio ao Pequeno Produtor Rural
+# 🌿 Sítio Conectado - Portal de Apoio ao Pequeno Produtor Rural
 
 > Projeto desenvolvido como parte da Atividade Multidisciplinar Integradora - 3º Período  
 > Tecnologia em Análise e Desenvolvimento de Sistemas - TADS  
@@ -236,7 +236,7 @@ O banco de dados relacional `sitio_conectado` é composto por 5 tabelas:
 | Ednaldo Conceição Ferreira | Desenvolvimento |
 | _(adicionar demais integrantes)_ | _(função)_ |
 
-**Polo:** Sítio Novo — TO  
+**Polo:** Sítio Novo - TO  
 **Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas - TADS  
 **Instituição:** Universidade Estadual do Tocantins = UNITINS  
 **Período:** 3º Período — 2026.1
