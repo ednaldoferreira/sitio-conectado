@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Interessados — Sítio Conectado{% endblock %}
+{% block content %}
+
+<div class="breadcrumb">
+  <a href="{{ url_for('meus_produtos') }}">Meus Produtos</a>
+  <i class="bi bi-chevron-right" style="font-size:.7rem;opacity:.4"></i>
+  <span>Interessados</span>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem;">
+  <div>
+    <h1 class="page-title">Interessados</h1>
+    <p class="page-sub">Consumidores interessados em: <strong>{{ produto.nome }}</strong></p>
+  </div>
+  <a href="{{ url_for('meus_produtos') }}" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
+</div>
+
+{% if interessados %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Consumidor</th>
+        <th>Contato</th>
+        <th>E-mail</th>
+        <th>Mensagem</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in interessados %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <div style="width:32px;height:32px;background:var(--terra-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;font-weight:700;flex-shrink:0;">{{ i.nome[0].upper() }}</div>
+            <strong>{{ i.nome }}</strong>
+          </div>
+        </td>
+        <td>{{ i.telefone or '—' }}</td>
+        <td style="font-size:.82rem;color:var(--texto-sub);">{{ i.email }}</td>
+        <td style="font-size:.85rem;max-width:220px;">{{ i.mensagem or '—' }}</td>
+        <td style="font-size:.78rem;color:var(--texto-sub);white-space:nowrap;">{{ i.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card">
+  <div class="empty">
+    <i class="bi bi-people"></i>
+    <h3 style="font-family:'Playfair Display',serif;margin-bottom:.5rem;">Nenhum interessado ainda</h3>
+    <p style="font-size:.9rem;">Quando consumidores demonstrarem interesse, aparecerão aqui.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

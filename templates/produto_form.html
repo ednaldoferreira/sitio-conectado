@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}{% if produto %}Editar{% else %}Novo{% endif %} Produto — Sítio Conectado{% endblock %}
+{% block content %}
+
+<div class="breadcrumb">
+  <a href="{{ url_for('meus_produtos') }}">Meus Produtos</a>
+  <i class="bi bi-chevron-right" style="font-size:.7rem;opacity:.4"></i>
+  <span>{% if produto %}Editar Produto{% else %}Novo Produto{% endif %}</span>
+</div>
+
+<div style="max-width:640px;margin:0 auto;">
+  <div style="margin-bottom:1.75rem;">
+    <h1 class="page-title">{% if produto %}Editar Produto{% else %}Cadastrar Produto{% endif %}</h1>
+    <p class="page-sub">{% if produto %}Atualize as informações do produto.{% else %}Preencha os dados do produto que deseja disponibilizar.{% endif %}</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label class="label">Nome do produto *</label>
+          <input type="text" name="nome" class="input" required value="{{ produto.nome if produto else '' }}" placeholder="Ex: Mel silvestre puro, Banana prata...">
+        </div>
+        <div class="form-group">
+          <label class="label">Descrição</label>
+          <textarea name="descricao" class="input" rows="3" placeholder="Descreva o produto, forma de cultivo, características...">{{ produto.descricao if produto else '' }}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="label">Imagem do produto</label>
+          <input type="file" name="imagem" class="input" accept="image/png,image/jpeg,image/jpg,image/gif" onchange="previewImage(this)">
+          <small style="color:var(--texto-sub);font-size:0.8rem;">Formatos aceitos: PNG, JPG, JPEG, GIF. Tamanho máximo: 5MB</small>
+          {% if produto and produto.imagem %}
+          <div style="margin-top:1rem;">
+            <p style="font-size:0.8rem;color:var(--texto-sub);margin-bottom:0.5rem;">Imagem atual:</p>
+            <img src="{{ url_for('static', filename=produto.imagem) }}" style="max-width:150px;max-height:150px;border:1px solid var(--borda);border-radius:8px;" alt="Imagem atual">
+            <div style="margin-top:0.75rem;">
+              <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--texto-sub);cursor:pointer;">
+                <input type="checkbox" name="remover_imagem" value="1" style="margin:0;">
+                <span>Remover imagem atual e usar apenas emoji</span>
+              </label>
+            </div>
+          </div>
+          {% endif %}
+          <div id="image-preview" style="margin-top:1rem;display:none;">
+            <p style="font-size:0.8rem;color:var(--texto-sub);margin-bottom:0.5rem;">Pré-visualização:</p>
+            <img id="preview-img" style="max-width:150px;max-height:150px;border:1px solid var(--borda);border-radius:8px;" alt="Pré-visualização">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="label">Categoria *</label>
+          <select name="categoria_id" class="select" required>
+            <option value="">Selecione uma categoria</option>
+            {% for cat in categorias %}
+            <option value="{{ cat.id }}" {% if produto and produto.categoria_id == cat.id %}selected{% endif %}>{{ cat.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="row2">
+          <div class="form-group">
+            <label class="label">Quantidade *</label>
+            <input type="number" name="quantidade" class="input" required min="0" value="{{ produto.quantidade if produto else '' }}" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label class="label">Unidade</label>
+            <select name="unidade" class="select">
+              {% for un in ['kg','g','unidade','dúzia','litro','caixa','saco','maço'] %}
+              <option value="{{ un }}" {% if produto and produto.unidade == un %}selected{% endif %}>{{ un }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        {% if produto %}
+        <div class="form-group">
+          <label class="label">Status</label>
+          <select name="status" class="select">
+            <option value="disponivel" {% if produto.status == 'disponivel' %}selected{% endif %}>✅ Disponível</option>
+            <option value="indisponivel" {% if produto.status == 'indisponivel' %}selected{% endif %}>⏸ Indisponível</option>
+          </select>
+        </div>
+        {% endif %}
+        <div class="divider"></div>
+        <div style="display:flex;gap:.75rem;">
+          <button type="submit" class="btn btn-green" style="padding:12px 28px;">
+            <i class="bi bi-check-lg"></i> {% if produto %}Salvar alterações{% else %}Cadastrar produto{% endif %}
+          </button>
+          <a href="{{ url_for('meus_produtos') }}" class="btn btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewImage(input) {
+  const preview = document.getElementById('image-preview');
+  const previewImg = document.getElementById('preview-img');
+  
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    
+    // Verificar tamanho do arquivo (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Arquivo muito grande! Máximo permitido: 5MB');
+      input.value = '';
+      preview.style.display = 'none';
+      return;
+    }
+    
+    // Verificar tipo do arquivo
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Tipo de arquivo não permitido! Use apenas PNG, JPG, JPEG ou GIF.');
+      input.value = '';
+      preview.style.display = 'none';
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+</script>
+{% endblock %}

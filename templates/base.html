@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Sítio Conectado{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --verde:     #1E5C2E;
+      --verde-med: #2D7A42;
+      --verde-lt:  #3FA05A;
+      --terra:     #8B5E3C;
+      --terra-lt:  #C4874F;
+      --creme:     #F7F3EE;
+      --creme-dk:  #EDE7DC;
+      --branco:    #FDFAF7;
+      --texto:     #1A1A1A;
+      --texto-sub: #5A5A5A;
+      --borda:     #D8CFC4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--creme); color: var(--texto); min-height: 100vh; }
+
+    /* NAVBAR */
+    .navbar {
+      background: var(--verde);
+      padding: 0 2.5rem;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .brand-icon { width:38px; height:38px; background:var(--terra-lt); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+    .brand-name { font-family:'Playfair Display',serif; font-size:1.2rem; color:#fff; font-weight:700; }
+    .brand-loc { display:block; font-size:0.62rem; color:rgba(255,255,255,0.55); letter-spacing:1.2px; text-transform:uppercase; font-weight:300; line-height:1; }
+    .nav-list { display:flex; align-items:center; gap:4px; list-style:none; }
+    .nav-list a { color:rgba(255,255,255,0.8); text-decoration:none; font-size:0.875rem; font-weight:500; padding:8px 13px; border-radius:8px; display:flex; align-items:center; gap:6px; transition:all .2s; }
+    .nav-list a:hover { background:rgba(255,255,255,0.13); color:#fff; }
+    .nav-cta { background:var(--terra-lt) !important; color:#fff !important; }
+    .nav-cta:hover { background:var(--terra) !important; }
+    .dropdown { position:relative; }
+    .drop-toggle { cursor:pointer; display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.85); font-size:0.875rem; font-weight:500; padding:8px 13px; border-radius:8px; transition:all .2s; }
+    .drop-toggle:hover { background:rgba(255,255,255,0.13); color:#fff; }
+    .avatar { width:30px; height:30px; background:var(--terra-lt); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:#fff; }
+    .drop-menu { position:absolute; right:0; top:calc(100% + 8px); background:#fff; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,0.15); border:1px solid var(--borda); min-width:190px; overflow:hidden; display:none; z-index:200; }
+    .dropdown:hover .drop-menu { display:block; }
+    .drop-menu a { display:flex; align-items:center; gap:10px; padding:11px 16px; color:var(--texto); text-decoration:none; font-size:0.875rem; font-weight:500; transition:background .15s; }
+    .drop-menu a:hover { background:var(--creme); }
+    .drop-menu a.red { color:#c0392b; }
+    .drop-div { height:1px; background:var(--borda); }
+
+    /* ALERTS */
+    .alerts { max-width:1200px; margin:1rem auto 0; padding:0 2rem; }
+    .alert { display:flex; align-items:center; gap:10px; padding:13px 16px; border-radius:12px; font-size:0.875rem; font-weight:500; margin-bottom:8px; border:1px solid transparent; animation:fadeIn .3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .alert-success { background:#edf7f0; color:#1a6b35; border-color:#b8e0c6; }
+    .alert-danger  { background:#fdf0ef; color:#a62020; border-color:#f5c2be; }
+    .alert-warning { background:#fdf8ee; color:#8a6000; border-color:#f0dfa0; }
+    .alert-info    { background:#eef4fd; color:#1a4b8a; border-color:#b8d0f0; }
+    .alert-x { margin-left:auto; cursor:pointer; opacity:.5; background:none; border:none; font-size:1.1rem; }
+    .alert-x:hover { opacity:1; }
+
+    /* WRAPPER */
+    .wrap { max-width:1200px; margin:0 auto; padding:2rem 2rem 5rem; }
+
+    /* CARD */
+    .card { background:var(--branco); border-radius:16px; border:1px solid var(--borda); box-shadow:0 4px 20px rgba(30,92,46,0.08); overflow:hidden; }
+    .card-hdr { background:var(--verde); color:#fff; padding:1.2rem 1.5rem; font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:600; display:flex; align-items:center; gap:10px; }
+    .card-body { padding:1.75rem; }
+
+    /* BUTTONS */
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:10px; font-size:0.875rem; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; border:none; transition:all .2s; text-decoration:none; }
+    .btn-green { background:var(--verde); color:#fff; }
+    .btn-green:hover { background:var(--verde-med); transform:translateY(-1px); box-shadow:0 4px 14px rgba(30,92,46,0.25); }
+    .btn-terra { background:var(--terra-lt); color:#fff; }
+    .btn-terra:hover { background:var(--terra); transform:translateY(-1px); }
+    .btn-outline { background:transparent; color:var(--verde); border:2px solid var(--verde); }
+    .btn-outline:hover { background:var(--verde); color:#fff; }
+    .btn-red { background:#c0392b; color:#fff; }
+    .btn-red:hover { background:#a62020; }
+    .btn-ghost { background:var(--creme-dk); color:var(--texto-sub); border:1px solid var(--borda); }
+    .btn-ghost:hover { background:var(--borda); color:var(--texto); }
+    .btn-sm { padding:7px 13px; font-size:0.8rem; border-radius:8px; }
+    .btn-full { width:100%; justify-content:center; }
+
+    /* FORMS */
+    .form-group { margin-bottom:1.25rem; }
+    .label { display:block; font-size:0.78rem; font-weight:600; color:var(--texto-sub); text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+    .input, .select, textarea.input { width:100%; padding:11px 14px; border:1.5px solid var(--borda); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:var(--texto); background:var(--branco); transition:border-color .2s,box-shadow .2s; outline:none; }
+    .input:focus, .select:focus { border-color:var(--verde-med); box-shadow:0 0 0 3px rgba(45,122,66,0.12); }
+    textarea.input { resize:vertical; min-height:90px; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    @media(max-width:600px){ .row2,.row3 { grid-template-columns:1fr; } }
+
+    /* BADGES */
+    .badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; letter-spacing:.3px; text-transform:uppercase; }
+    .bg-green { background:#e4f5e9; color:#1a6b35; }
+    .bg-terra { background:#fdf0e4; color:#8B5E3C; }
+    .bg-gray  { background:#f0ede9; color:#666; }
+    .bg-red   { background:#fdf0ef; color:#a62020; }
+
+    /* TABLE */
+    .table-wrap { overflow-x:auto; border-radius:16px; border:1px solid var(--borda); box-shadow:0 4px 20px rgba(30,92,46,0.07); }
+    table { width:100%; border-collapse:collapse; background:var(--branco); }
+    thead tr { background:var(--verde); }
+    thead th { padding:14px 18px; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.6px; color:#fff; text-align:left; }
+    tbody tr { border-bottom:1px solid var(--creme-dk); transition:background .15s; }
+    tbody tr:hover { background:var(--creme); }
+    tbody td { padding:13px 18px; font-size:0.875rem; vertical-align:middle; }
+    tbody tr:last-child { border-bottom:none; }
+
+    /* MISC */
+    .divider { height:1px; background:var(--borda); margin:1.25rem 0; }
+    .breadcrumb { display:flex; align-items:center; gap:6px; margin-bottom:1.5rem; font-size:0.85rem; color:var(--texto-sub); }
+    .breadcrumb a { color:var(--verde); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; }
+    .empty { text-align:center; padding:4rem 2rem; color:var(--texto-sub); }
+    .empty i { font-size:2.8rem; opacity:.25; display:block; margin-bottom:.75rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--verde); margin-bottom:.3rem; }
+    .page-sub { color:var(--texto-sub); font-size:0.9rem; margin-bottom:1.5rem; }
+    footer { background:var(--verde); color:rgba(255,255,255,0.55); text-align:center; padding:1.5rem; font-size:0.82rem; margin-top:4rem; }
+    footer strong { color:rgba(255,255,255,0.9); }
+    .radio-group { display:flex; gap:1rem; }
+    .radio-card input { display:none; }
+    .radio-card label { display:flex; align-items:center; gap:10px; padding:13px 18px; border:2px solid var(--borda); border-radius:12px; cursor:pointer; transition:all .2s; font-weight:500; }
+    .radio-card input:checked + label { border-color:var(--verde); background:#edf7f0; color:var(--verde); }
+
+    /* CARROSSEL */
+    .carousel { border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(30,92,46,0.08); margin-bottom: 2rem; }
+    .carousel-item img { height: 400px; object-fit: cover; }
+    .carousel-control-prev-icon, .carousel-control-next-icon { background-color: var(--verde); border-radius: 50%; padding: 10px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="brand" href="{{ url_for('produtos') }}">
+          <img src="{{ url_for('static', filename='img/logocentro-agricultura.png') }}" width="50" alt="Produtos Frescos do Campo">
+
+    <div>
+      <span class="brand-name">agricultura</span>
+      <span class="brand-loc">familiar</span>
+    </div>
+  </a>
+  <ul class="nav-list">
+    <li><a href="{{ url_for('produtos') }}"><i class="bi bi-basket2-fill"></i> Produtos</a></li>
+    {% if session.get('tipo') == 'produtor' %}
+    <li><a href="{{ url_for('meus_produtos') }}"><i class="bi bi-box-seam"></i> Meus Produtos</a></li>
+    <li><a href="{{ url_for('novo_produto') }}" class="nav-cta"><i class="bi bi-plus-lg"></i> Cadastrar</a></li>
+    {% endif %}
+    {% if session.get('usuario_id') %}
+    <li class="dropdown">
+      <div class="drop-toggle">
+        <div class="avatar">{{ session.get('nome','U')[0].upper() }}</div>
+        {{ session.get('nome','').split()[0] }}
+        <i class="bi bi-chevron-down" style="font-size:.65rem;opacity:.6"></i>
+      </div>
+      <div class="drop-menu">
+        <a href="{{ url_for('perfil') }}"><i class="bi bi-person-circle"></i> Meu Perfil</a>
+        <div class="drop-div"></div>
+        <a href="{{ url_for('logout') }}" class="red"><i class="bi bi-box-arrow-right"></i> Sair</a>
+      </div>
+    </li>
+    {% else %}
+    <li><a href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right"></i> Entrar</a></li>
+    <li><a href="{{ url_for('cadastro') }}" class="nav-cta"><i class="bi bi-person-plus"></i> Cadastrar</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ url_for('static', filename='img/banner1.png') }}" class="d-block w-100" alt="Bem-vindo ao Sítio Conectado">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static', filename='img/banner2.png') }}" class="d-block w-100" alt="Produtos Frescos do Campo">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static', filename='img/banner3.png') }}" class="d-block w-100" alt="Apoio aos Produtores Rurais">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="alerts">
+  {% for cat, msg in messages %}
+  <div class="alert alert-{{ cat }}">
+    <i class="bi bi-{% if cat=='success' %}check-circle{% elif cat=='danger' %}exclamation-circle{% elif cat=='warning' %}exclamation-triangle{% else %}info-circle{% endif %}-fill"></i>
+    {{ msg }}
+    <button class="alert-x" onclick="this.parentElement.remove()">×</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="wrap">{% block content %}{% endblock %}</div>
+
+<footer>
+  <strong>🌿 Sítio Conectado</strong> &mdash; Apoio ao Pequeno Produtor Rural de Sítio Novo — TO &mdash; UNITINS 2026
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

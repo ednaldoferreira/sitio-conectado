@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %}{{ produto.nome }} — Sítio Conectado{% endblock %}
+{% block content %}
+
+<div class="breadcrumb">
+  <a href="{{ url_for('produtos') }}">Produtos</a>
+  <i class="bi bi-chevron-right" style="font-size:.7rem;opacity:.4"></i>
+  <span>{{ produto.nome }}</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;">
+
+  <!-- Coluna principal -->
+  <div>
+    <!-- Card produto -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="background:linear-gradient(135deg,var(--creme-dk),var(--creme));height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        {% if produto.imagem %}
+        <img src="{{ url_for('static', filename=produto.imagem) }}" style="max-width:100%;max-height:100%;object-fit:cover;" alt="{{ produto.nome }}">
+        {% else %}
+        {% if produto.categoria_nome == 'Frutas' %}🍎
+        {% elif produto.categoria_nome == 'Verduras' %}🥦
+        {% elif produto.categoria_nome == 'Grãos' %}🌾
+        {% elif produto.categoria_nome == 'Mel' %}🍯
+        {% elif produto.categoria_nome == 'Ovos' %}🥚
+        {% elif produto.categoria_nome == 'Laticínios' %}🧀
+        {% else %}🌿{% endif %}
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+          <span class="badge bg-green">{{ produto.categoria_nome }}</span>
+          <span class="badge {% if produto.status == 'disponivel' %}bg-green{% else %}bg-gray{% endif %}">
+            {{ 'Disponível' if produto.status == 'disponivel' else 'Indisponível' }}
+          </span>
+        </div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--verde);margin-bottom:.75rem;">{{ produto.nome }}</h1>
+        <p style="color:var(--texto-sub);line-height:1.7;margin-bottom:1.25rem;">{{ produto.descricao or 'Sem descrição disponível para este produto.' }}</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;padding:1.25rem;background:var(--creme);border-radius:12px;">
+          <div style="text-align:center;">
+            <p style="font-size:.75rem;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.3rem;">Disponível</p>
+            <p style="font-size:1.3rem;font-weight:700;color:var(--verde);">{{ produto.quantidade }} {{ produto.unidade }}</p>
+          </div>
+          <div style="text-align:center;border-left:1px solid var(--borda);border-right:1px solid var(--borda);">
+            <p style="font-size:.75rem;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.3rem;">Interessados</p>
+            <p style="font-size:1.3rem;font-weight:700;color:var(--terra);">{{ total_interesse }}</p>
+          </div>
+          <div style="text-align:center;">
+            <p style="font-size:.75rem;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.3rem;">Produtor</p>
+            <p style="font-size:.95rem;font-weight:600;">{{ produto.produtor_nome.split()[0] }}</p>
+          </div>
+        </div>
+
+        {% if produto.produtor_tel %}
+        <div style="margin-top:1rem;padding:.75rem 1rem;background:#edf7f0;border-radius:10px;display:flex;align-items:center;gap:.6rem;">
+          <i class="bi bi-telephone-fill" style="color:var(--verde)"></i>
+          <span style="font-size:.875rem;font-weight:500;">Contato: <strong>{{ produto.produtor_tel }}</strong></span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Comentários -->
+    <div class="card">
+      <div class="card-hdr"><i class="bi bi-chat-dots-fill"></i> Comentários ({{ comentarios|length }})</div>
+      <div class="card-body">
+        {% if comentarios %}
+          {% for cm in comentarios %}
+          <div style="padding:.75rem 0;{% if not loop.last %}border-bottom:1px solid var(--creme-dk){% endif %}">
+            <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;">
+              <div style="width:28px;height:28px;background:var(--verde);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">{{ cm.autor[0].upper() }}</div>
+              <strong style="font-size:.875rem;">{{ cm.autor }}</strong>
+              <span class="badge {% if cm.tipo == 'produtor' %}bg-green{% else %}bg-terra{% endif %}">{{ cm.tipo }}</span>
+              <span style="margin-left:auto;font-size:.75rem;color:var(--texto-sub);">{{ cm.criado_em.strftime('%d/%m/%Y') }}</span>
+            </div>
+            <p style="font-size:.875rem;color:var(--texto-sub);padding-left:2.2rem;line-height:1.6;">{{ cm.texto }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p style="color:var(--texto-sub);font-size:.875rem;text-align:center;padding:1rem 0;">Nenhum comentário ainda. Seja o primeiro!</p>
+        {% endif %}
+
+        {% if session.get('usuario_id') %}
+        <div class="divider"></div>
+        <form method="POST" action="{{ url_for('adicionar_comentario', id=produto.id) }}">
+          <div class="form-group">
+            <label class="label">Seu comentário</label>
+            <textarea name="texto" class="input" rows="3" placeholder="Escreva sua dúvida ou comentário sobre o produto..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-green btn-sm"><i class="bi bi-send-fill"></i> Enviar comentário</button>
+        </form>
+        {% else %}
+        <div style="text-align:center;padding:1rem 0;font-size:.875rem;color:var(--texto-sub);">
+          <a href="{{ url_for('login') }}" style="color:var(--verde);font-weight:600;">Faça login</a> para comentar.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Coluna lateral -->
+  <div style="position:sticky;top:80px;">
+    <div class="card">
+      <div class="card-hdr"><i class="bi bi-heart-fill"></i> Demonstrar Interesse</div>
+      <div class="card-body">
+        {% if session.get('usuario_id') %}
+          {% if ja_interessou %}
+          <div style="text-align:center;padding:1rem 0;">
+            <div style="font-size:2.5rem;margin-bottom:.75rem;">✅</div>
+            <p style="font-weight:600;color:var(--verde);margin-bottom:.3rem;">Interesse registrado!</p>
+            <p style="font-size:.85rem;color:var(--texto-sub);">O produtor poderá ver suas informações de contato.</p>
+          </div>
+          {% elif session.get('tipo') == 'consumidor' %}
+          <p style="font-size:.875rem;color:var(--texto-sub);margin-bottom:1rem;line-height:1.6;">Ao demonstrar interesse, o produtor poderá entrar em contato com você para combinar a retirada ou entrega.</p>
+          <form method="POST" action="{{ url_for('demonstrar_interesse', id=produto.id) }}">
+            <div class="form-group">
+              <label class="label">Mensagem (opcional)</label>
+              <textarea name="mensagem" class="input" rows="3" placeholder="Ex: Quero 5kg. Quando posso retirar?"></textarea>
+            </div>
+            <button type="submit" class="btn btn-terra btn-full" style="padding:13px;">
+              <i class="bi bi-heart-fill"></i> Tenho interesse!
+            </button>
+          </form>
+          {% else %}
+          <p style="color:var(--texto-sub);font-size:.875rem;text-align:center;padding:.5rem 0;">Produtores não podem demonstrar interesse em produtos.</p>
+          {% endif %}
+        {% else %}
+        <div style="text-align:center;padding:.5rem 0;">
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">🛒</div>
+          <p style="font-size:.875rem;color:var(--texto-sub);margin-bottom:1rem;">Faça login para demonstrar interesse neste produto e entrar em contato com o produtor.</p>
+          <a href="{{ url_for('login') }}" class="btn btn-green btn-full" style="padding:13px;">
+            <i class="bi bi-box-arrow-in-right"></i> Fazer Login
+          </a>
+          <a href="{{ url_for('cadastro') }}" class="btn btn-ghost btn-full btn-sm" style="margin-top:.6rem;">Criar conta grátis</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+@media(max-width:768px){
+  div[style*="grid-template-columns:1fr 340px"]{ display:block!important; }
+  div[style*="position:sticky"]{ position:static!important; margin-top:1.5rem; }
+}
+</style>
+{% endblock %}

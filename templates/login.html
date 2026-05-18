@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Entrar — Sítio Conectado{% endblock %}
+{% block content %}
+<div style="min-height:75vh;display:flex;align-items:center;justify-content:center;">
+<div style="width:100%;max-width:440px;">
+
+  <div style="text-align:center;margin-bottom:2rem;">
+    <div style="width:64px;height:64px;background:var(--verde);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;">🌿</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--verde);margin-bottom:.3rem;">Bem-vindo de volta</h1>
+    <p style="color:var(--texto-sub);font-size:.9rem;">Entre para acessar o portal do produtor rural</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form method="POST">
+        <div class="form-group">
+          <label class="label">E-mail</label>
+          <input type="email" name="email" class="input" placeholder="seu@email.com" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="label">Senha</label>
+          <input type="password" name="senha" class="input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-green btn-full" style="margin-top:.5rem;padding:13px;">
+          <i class="bi bi-box-arrow-in-right"></i> Entrar
+        </button>
+      </form>
+      <div class="divider"></div>
+      <p style="text-align:center;font-size:.875rem;color:var(--texto-sub);">
+        Não tem conta? <a href="{{ url_for('cadastro') }}" style="color:var(--verde);font-weight:600;text-decoration:none;">Cadastre-se gratuitamente</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+</div>
+{% endblock %}

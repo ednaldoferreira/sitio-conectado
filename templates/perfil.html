@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Meu Perfil — Sítio Conectado{% endblock %}
+{% block content %}
+
+<div style="max-width:540px;margin:0 auto;">
+  <div style="margin-bottom:1.75rem;">
+    <h1 class="page-title">Meu Perfil</h1>
+    <p class="page-sub">Atualize suas informações de contato</p>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--creme-dk);">
+        <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--verde),var(--verde-med));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;font-weight:700;font-family:'Playfair Display',serif;flex-shrink:0;">
+          {{ usuario.nome[0].upper() }}
+        </div>
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.3rem;">{{ usuario.nome }}</h2>
+          <span class="badge {% if usuario.tipo == 'produtor' %}bg-green{% else %}bg-terra{% endif %}">
+            {% if usuario.tipo == 'produtor' %}🌱 Produtor Rural{% else %}🛒 Consumidor{% endif %}
+          </span>
+        </div>
+      </div>
+
+      <form method="POST">
+        <div class="form-group">
+          <label class="label">Nome completo</label>
+          <input type="text" name="nome" class="input" value="{{ usuario.nome }}" required>
+        </div>
+        <div class="form-group">
+          <label class="label">E-mail</label>
+          <input type="email" class="input" value="{{ usuario.email }}" disabled style="opacity:.6;cursor:not-allowed;">
+          <p style="font-size:.78rem;color:var(--texto-sub);margin-top:.4rem;">O e-mail não pode ser alterado.</p>
+        </div>
+        <div class="form-group">
+          <label class="label">Telefone</label>
+          <input type="text" name="telefone" class="input" value="{{ usuario.telefone or '' }}" placeholder="(99) 99999-9999">
+          <p style="font-size:.78rem;color:var(--texto-sub);margin-top:.4rem;">Seu telefone fica visível para produtores quando você demonstra interesse em produtos.</p>
+        </div>
+        <div class="divider"></div>
+        <button type="submit" class="btn btn-green btn-full" style="padding:13px;">
+          <i class="bi bi-check-lg"></i> Salvar alterações
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:#f5c2be;">
+    <div class="card-body">
+      <h3 style="font-size:.95rem;font-weight:600;color:#a62020;margin-bottom:.5rem;"><i class="bi bi-box-arrow-right"></i> Encerrar sessão</h3>
+      <p style="font-size:.85rem;color:var(--texto-sub);margin-bottom:1rem;">Clique abaixo para sair da sua conta no dispositivo atual.</p>
+      <a href="{{ url_for('logout') }}" class="btn btn-ghost btn-sm" style="border-color:#f5c2be;color:#a62020;">Sair da conta</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
